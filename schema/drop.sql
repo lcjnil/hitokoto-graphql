@@ -1,0 +1,1 @@
+Drop SCHEMA hitokoto CASCADE;
