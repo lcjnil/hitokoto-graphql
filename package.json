@@ -1,0 +1,25 @@
+{
+  "name": "hitokoto",
+  "version": "0.0.1",
+  "description": "Hitokoto, a graphql version",
+  "main": "index.js",
+  "scripts": {
+    "start": "postgraphql --schema hitokoto",
+    "init": "psql -f ./schema/schema.sql",
+    "drop": "psql -f ./schema/drop.sql",
+    "init:data": "psql -f ./schema/data.sql"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lcjnil/hitokoto-graphql.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lcjnil/hitokoto-graphql/issues"
+  },
+  "homepage": "https://github.com/lcjnil/hitokoto-graphql#readme",
+  "dependencies": {
+    "postgraphql": "^2.3.0"
+  }
+}
