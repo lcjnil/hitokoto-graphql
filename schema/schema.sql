@@ -8,6 +8,6 @@ CREATE TABLE hitokoto.hitokoto (
   createdAt TIMESTAMP DEFAULT now()
 );
 
-CREATE FUNCTION hitokoto.randomHitokoto() RETURNS hitokoto.hitokoto as $$
+CREATE FUNCTION hitokoto.random_hitokoto() RETURNS hitokoto.hitokoto as $$
   SELECT * FROM hitokoto.hitokoto ORDER BY random() LIMIT 1
-$$ LANGUAGE sql;
+$$ LANGUAGE sql STABLE;
