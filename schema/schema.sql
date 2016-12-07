@@ -3,15 +3,6 @@ create schema hitokoto_private;
 
 create extension if not exists "pgcrypto";
 
-create role hitokoto_postgraphql login;
-
-create role hitokoto_anonymous;
-grant hitokoto_anonymous to hitokoto_graphql;
-
-create role hitokoto_user;
-grant hitokoto_user to hitokoto_graphql;
-
-
 /*
  * Public User Info
  */
@@ -30,13 +21,15 @@ create table hitokoto_private.user_account (
   password_hash text    not null
 );
 
+/*
+ * Type for JSON WEB TOKEN
+ */
 create type hitokoto.jwt_token as (
   role    text,
   user_id integer
 );
 
 /* register and login */
-
 create or replace function hitokoto.register(
   name     text,
   email    text,
@@ -44,16 +37,16 @@ create or replace function hitokoto.register(
 )
   returns hitokoto.user as $$
 declare
-  "user" hitokoto.user;
+  u hitokoto.user;
 begin
   insert into hitokoto.user (name) values (name)
   returning *
-    into "user";
+    into u;
 
   insert into hitokoto_private.user_account (user_id, email, password_hash) values
-    ("user".id, email, crypt(password, gen_salt('bf')));
+    (u.id, email, crypt(password, gen_salt('bf')));
 
-  return "user";
+  return u;
 end;
 $$ language plpgsql strict security definer;
 
@@ -67,7 +60,7 @@ declare
 begin
   select * into user_account
   from hitokoto_private.user_account
-  where hitokoto_private.user_account.email = login.email;
+  where hitokoto_private.user_account.email = $1;
 
   if user_account.password_hash = crypt(password, user_account.password_hash) then
     return ('hitokoto_user', user_account.user_id)::hitokoto.jwt_token;
@@ -94,12 +87,11 @@ create table hitokoto.hitokoto (
   createdAt  timestamp default now()
 );
 
-create function hitokoto.random_hitokoto()
-  returns hitokoto.hitokoto as $$
-select *
-from hitokoto.hitokoto
-order by random()
-limit 1
+create or replace function hitokoto.random_hitokoto() returns hitokoto.hitokoto as $$
+  select *
+  from hitokoto.hitokoto
+  order by random()
+  limit 1
 $$ language sql stable;
 
 create or replace function hitokoto.create_new_hitokoto (
@@ -117,32 +109,3 @@ begin
   return h;
 end;
 $$ language plpgsql;
-
-grant usage on schema hitokoto to hitokoto_anonymous, hitokoto_user;
-
-grant select on table hitokoto.user to hitokoto_anonymous, hitokoto_user;
-grant update, delete on table hitokoto.user to hitokoto_user;
-
-grant select on table hitokoto.hitokoto to hitokoto_anonymous, hitokoto_user;
-grant insert, update, delete on table hitokoto.hitokoto to hitokoto_user;
-grant usage on sequence hitokoto.hitokoto_id_seq to hitokoto_user;
-
-grant execute on function hitokoto.random_hitokoto() to hitokoto_anonymous, hitokoto_user;
-grant execute on function hitokoto.current_user() to hitokoto_anonymous, hitokoto_user;
-
-alter table hitokoto.user enable row level security;
-alter table hitokoto.hitokoto enable row level security;
-
-create policy select_user on hitokoto.user for select
-using (true);
-create policy select_user on hitokoto.hitokoto for select
-using (true);
-
-create policy insert_hitokoto on hitokoto.hitokoto  for insert to hitokoto_user
-with check (creator_id = current_setting('jwt.claims.user_id')::integer);
-
-create policy update_hitokoto on hitokoto.hitokoto  for update to hitokoto_user
-using (creator_id = current_setting('jwt.claims.user_id')::integer);
-
-create policy delete_hitokoto on hitokoto.hitokoto  for delete to hitokoto_user
-using (creator_id = current_setting('jwt.claims.user_id')::integer);
