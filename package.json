@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "postgraphql --schema hitokoto",
+    "start:server": "node index",
     "init": "psql -f ./schema/schema.sql && psql -f ./schema/role.sql",
     "drop": "psql -f ./schema/drop.sql",
-    "init:data": "psql -f ./schema/data.sql"
+    "init:data": "psql -f ./schema/data.sql",
+    "test:api": "mocha --es_staging"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,13 @@
   "homepage": "https://github.com/lcjnil/hitokoto-graphql#readme",
   "dependencies": {
     "koa": "next",
-    "postgraphql": "^2.3.0"
+    "lokka": "^1.7.0",
+    "lokka-transport-http": "^1.6.1",
+    "postgraphql": "^2.3.0",
+    "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
   }
 }
