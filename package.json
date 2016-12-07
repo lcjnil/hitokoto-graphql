@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/lcjnil/hitokoto-graphql#readme",
   "dependencies": {
+    "koa": "next",
     "postgraphql": "^2.3.0"
   }
 }
