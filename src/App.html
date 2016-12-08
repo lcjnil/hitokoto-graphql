@@ -1,0 +1,18 @@
+<Hitokoto ref:hitokoto/>
+
+
+<script>
+  import Hitokoto from './Hitokoto.html'
+
+  export default {
+    onrender() {
+      this.interval = setInterval(() => {
+        this.refs.hitokoto.getRandomHitokoto()
+      }, 2000)
+    },
+
+    components: {
+      Hitokoto
+    }
+  }
+</script>

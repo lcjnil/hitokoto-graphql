@@ -1,0 +1,8 @@
+localhost:2017 {
+  tls off
+
+  root ./public
+
+  proxy /graphql :5000
+  proxy /graphiql :5000
+}

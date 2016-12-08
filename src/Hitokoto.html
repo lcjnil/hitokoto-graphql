@@ -1,0 +1,42 @@
+<div class="root">
+  <p class="content">{{ content }}</p>
+  <p class="author">{{ author }}</p>
+  <p class="source">{{ source }}</p>
+</div>
+
+<script>
+  import {randomHitokotoQuery} from './query'
+
+  export default {
+    data() {
+      return {
+        content: '....',
+        author: '...',
+        source: '..'
+      }
+    },
+
+    onrender() {
+      this.getRandomHitokoto()
+    },
+
+    methods: {
+      getRandomHitokoto() {
+        fetch('/graphql', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            query: randomHitokotoQuery
+          })
+        }).then(r => r.json())
+          .then(r => r.data.randomHitokoto)
+          .then(this.set)
+      }
+    }
+  }
+</script>
+
+<style>
+</style>
