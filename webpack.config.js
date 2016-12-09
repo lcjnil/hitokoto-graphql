@@ -10,8 +10,7 @@ module.exports = {
   },
   output: {
     path: __dirname + '/public',
-    filename: '[name].js',
-    chunkFilename: '[name].[id].js'
+    filename: '[name].js'
   },
   module: {
     rules: [{
@@ -25,5 +24,5 @@ module.exports = {
       use: 'svelte-loader'
     }]
   },
-  devtool: 'inline-source-map'
+  // devtool: 'inline-source-map'
 };

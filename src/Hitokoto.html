@@ -1,7 +1,9 @@
-<div class="root">
+<div class="root typo">
   <p class="content">{{ content }}</p>
-  <p class="author">{{ author }}</p>
-  <p class="source">{{ source }}</p>
+  <p class="info">
+    <span class="author">{{ author }}</span>
+    <span class="source">《{{ source }}》</span>
+  </p>
 </div>
 
 <script>
@@ -39,4 +41,44 @@
 </script>
 
 <style>
+  .root {
+    width: 800px;
+    margin: 0 auto;
+  }
+  .content {
+    font-size: 30px;
+    position: relative;
+  }
+
+  .content:before, .content:after {
+    font-weight: 500;
+  }
+
+  .content:before {
+    content: '「';
+    position: absolute;
+    top: -10px;
+    left: -40px;
+  }
+
+  .content:after {
+    content: '」';
+    position: absolute;
+    bottom: 0;
+    right: -20px;
+  }
+
+  .info {
+    font-size: 20px;
+    text-align: right;
+  }
+
+  .author:before {
+    content: '——';
+    margin-right: 5px;
+  }
+
+  .source {
+    color: black;
+  }
 </style>

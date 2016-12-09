@@ -1,4 +1,6 @@
-<Hitokoto ref:hitokoto/>
+<main class="container">
+  <Hitokoto class="hitokoto" ref:hitokoto/>
+</main>
 
 
 <script>
@@ -6,9 +8,7 @@
 
   export default {
     onrender() {
-      this.interval = setInterval(() => {
-        this.refs.hitokoto.getRandomHitokoto()
-      }, 2000)
+      console.log(this.refs.hitokoto)
     },
 
     components: {
@@ -16,3 +16,12 @@
     }
   }
 </script>
+
+<style>
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+</style>
