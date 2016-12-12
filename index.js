@@ -1,6 +1,9 @@
 const Koa = require('koa')
 const postgraphql = require('postgraphql').postgraphql
 
+const pgConfig = process.env.PG_CONFIG || 'postgres://localhost:5432'
+console.log(pgConfig)
+
 const app = new Koa()
 
 app.use((ctx, next) => {
@@ -8,7 +11,7 @@ app.use((ctx, next) => {
   return next()
 })
 
-app.use(postgraphql('postgres://localhost:5432', 'hitokoto', {
+app.use(postgraphql(pgConfig, 'hitokoto', {
   pgDefaultRole: 'hitokoto_anonymous',
   jwtSecret: 'hitokoto',
   jwtPgTypeIdentifier: '"hitokoto".jwt_token',
