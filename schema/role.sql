@@ -21,8 +21,8 @@ begin
   raise notice 'hitokoto_user exists, not re-creating';
 end $$;
 
-grant hitokoto_anonymous to hitokoto_graphql;
-grant hitokoto_user to hitokoto_graphql;
+grant hitokoto_anonymous to hitokoto_postgraphql;
+grant hitokoto_user to hitokoto_postgraphql;
 
 grant usage on schema hitokoto to hitokoto_anonymous, hitokoto_user;
 
