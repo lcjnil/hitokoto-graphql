@@ -1,0 +1,8 @@
+FROM postgres:9.6
+
+# Create app directory
+RUN mkdir -p /usr/src/
+WORKDIR /usr/usr/src/
+
+COPY schema /usr/src/schema
+COPY schema/init.sh /docker-entrypoint-initdb.d/

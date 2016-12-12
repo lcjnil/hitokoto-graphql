@@ -1,12 +1,14 @@
-create schema hitokoto;
-create schema hitokoto_private;
+begin;
+
+create schema if not exists hitokoto;
+create schema if not exists hitokoto_private;
 
 create extension if not exists "pgcrypto";
 
 /*
  * Public User Info
  */
-create table hitokoto.user (
+create table if not exists hitokoto.user (
   id   serial primary key,
   name text not null check (char_length(name) < 10)
 );
@@ -15,7 +17,7 @@ create table hitokoto.user (
  * Private Table for save user's account
  * No one can see this
  */
-create table hitokoto_private.user_account (
+create table if not exists hitokoto_private.user_account (
   user_id       integer not null references hitokoto.user (id),
   email         text    not null unique check (email ~* '^.+@.+\..+$'),
   password_hash text    not null
@@ -23,11 +25,18 @@ create table hitokoto_private.user_account (
 
 /*
  * Type for JSON WEB TOKEN
+ * create or replace type, see: https://gist.github.com/levlaz/0af3425c79f1c99a88da
  */
-create type hitokoto.jwt_token as (
-  role    text,
-  user_id integer
-);
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'jwt_token') then
+    create type hitokoto.jwt_token as (
+      role    text,
+      user_id integer
+    );
+  end if;
+end
+$$;
 
 /* register and login */
 create or replace function hitokoto.register(
@@ -78,7 +87,7 @@ create or replace function hitokoto.current_user() returns hitokoto.user as $$
 $$ language sql stable;
 
 
-create table hitokoto.hitokoto (
+create table if not exists hitokoto.hitokoto (
   id         serial primary key,
   content    text    not null check (char_length(content) < 80),
   author     text check (char_length(author) < 20),
@@ -109,3 +118,5 @@ begin
   return h;
 end;
 $$ language plpgsql;
+
+commit;
