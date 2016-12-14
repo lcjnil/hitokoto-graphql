@@ -19,4 +19,8 @@ app.use(postgraphql(pgConfig, 'hitokoto', {
   graphiqlRoute: '/graphiql'
 }))
 
+app.use((ctx) => {
+  ctx.response.body = 'Hello, docker!'
+})
+
 app.listen(5000)
