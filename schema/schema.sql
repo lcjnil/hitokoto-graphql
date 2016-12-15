@@ -92,9 +92,11 @@ create table if not exists hitokoto.hitokoto (
   content    text    not null check (char_length(content) < 80),
   author     text check (char_length(author) < 20),
   source     text check (char_length(source) < 20),
-  creator_id integer not null references hitokoto.user (id),
-  createdAt  timestamp default now()
+  creator_id integer not null references hitokoto.user (id)
 );
+
+alter table hitokoto.hitokoto add column if not exists created_at date default now();
+alter table hitokoto.hitokoto add column if not exists type text default 'saying';
 
 create or replace function hitokoto.random_hitokoto() returns hitokoto.hitokoto as $$
   select *
@@ -106,14 +108,15 @@ $$ language sql stable;
 create or replace function hitokoto.create_new_hitokoto (
   content text,
   author text,
-  source text
+  source text,
+  type text
 )
   returns hitokoto.hitokoto as $$
 declare
   h hitokoto.hitokoto;
 begin
-  insert into hitokoto.hitokoto (content, author, source, creator_id) values
-    ($1, $2, $3, current_setting('jwt.claims.user_id')::integer)
+  insert into hitokoto.hitokoto (content, author, source, type, creator_id) values
+    ($1, $2, $3, $4, current_setting('jwt.claims.user_id')::integer)
     returning * into h;
   return h;
 end;
