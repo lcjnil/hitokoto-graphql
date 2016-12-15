@@ -2,7 +2,8 @@ const Koa = require('koa')
 const postgraphql = require('postgraphql').postgraphql
 
 const pgConfig = process.env.PG_CONFIG || 'postgres://localhost:5432'
-console.log(pgConfig)
+const isDebug = process.env.NODE_ENV === 'development'
+
 
 const app = new Koa()
 
@@ -16,7 +17,8 @@ app.use(postgraphql(pgConfig, 'hitokoto', {
   jwtSecret: 'hitokoto',
   jwtPgTypeIdentifier: '"hitokoto".jwt_token',
   graphiql: true,
-  graphiqlRoute: '/graphiql'
+  graphiqlRoute: '/graphiql',
+  enableCors: isDebug
 }))
 
 app.use((ctx) => {
