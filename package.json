@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "postgraphql --schema hitokoto",
-    "start:server": "node index",
+    "start:server": "node --harmony_async_await index",
     "init": "psql -f ./schema/schema.sql && psql -f ./schema/role.sql",
     "drop": "psql -f ./schema/drop.sql",
     "init:data": "psql -f ./schema/data.sql",
