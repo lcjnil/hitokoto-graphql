@@ -109,7 +109,7 @@ create or replace function hitokoto.create_new_hitokoto (
   content text,
   author text,
   source text,
-  type text
+  type text default 'saying'
 )
   returns hitokoto.hitokoto as $$
 declare
