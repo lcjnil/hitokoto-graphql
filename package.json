@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/lcjnil/hitokoto-graphql#readme",
   "dependencies": {
+    "co-wechat": "^1.0.0",
     "koa": "next",
+    "koa-convert": "^1.2.0",
     "lokka": "^1.7.0",
     "lokka-transport-http": "^1.6.1",
     "postgraphql": "^2.3.0"
