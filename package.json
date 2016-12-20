@@ -9,7 +9,7 @@
     "init": "psql -f ./schema/schema.sql && psql -f ./schema/role.sql",
     "drop": "psql -f ./schema/drop.sql",
     "init:data": "psql -f ./schema/data.sql",
-    "test:api": "mocha --es_staging",
+    "test": "mocha --es_staging",
     "bundle": "webpack"
   },
   "repository": {
