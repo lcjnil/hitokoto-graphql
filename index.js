@@ -21,7 +21,7 @@ app.use(postgraphql(pgConfig, 'hitokoto', {
   jwtPgTypeIdentifier: '"hitokoto".jwt_token',
   graphiql: true,
   graphiqlRoute: '/graphiql',
-  enableCors: isDebug
+  enableCors: isDebug,
 }))
 
 app.use(convert(wecaht({
@@ -29,8 +29,12 @@ app.use(convert(wecaht({
   token: wechatToken,
   encodingAESKey: aesKey
 }).middleware(function *() {
-  const res = yield client.getRandomHitokoto()
-  this.body = parseHitokoto(res.data.randomHitokoto)
+  try {
+    const res = yield client.getRandomHitokoto()
+    this.body = parseHitokoto(res.data.randomHitokoto)
+  } catch (e) {
+    this.body = 'Graphql 端挂了！'
+  }
 })))
 
 app.use((ctx) => {
