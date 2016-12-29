@@ -28,7 +28,7 @@
     "koa-convert": "^1.2.0",
     "lokka": "^1.7.0",
     "lokka-transport-http": "^1.6.1",
-    "postgraphql": "^2.4.0"
+    "postgraphql": "^2.4.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
