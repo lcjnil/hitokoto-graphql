@@ -65,7 +65,7 @@ describe('hitokoto api', () => {
       expect(r.currentUser.name).to.equal('lcj')
     })
 
-    it('should get currentUser when using jwt', async () => {
+    it('should generate token when using jwt', async () => {
       // Too hard to use, should be replaced
       const newClient = new Lokka({
         transport: new Transport('http://localhost:5000/graphql', {
@@ -82,6 +82,22 @@ describe('hitokoto api', () => {
       `)
       expect(r).to.have.property('generateToken')
       expect(r.generateToken).to.have.property('string')
+    })
+
+    it('should get token when using jwt', async () => {
+      // Too hard to use, should be replaced
+      const newClient = new Lokka({
+        transport: new Transport('http://localhost:5000/graphql', {
+          headers: {Authorization: `Bearer ${jwt}`}
+        })
+      })
+
+      const r = await newClient.query(`
+       {
+         getToken
+       }
+      `)
+      expect(r).to.have.property('getToken')
     })
   })
 })
